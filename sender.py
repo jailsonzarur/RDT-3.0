@@ -17,30 +17,41 @@ def calcular_checksum(data):
     return hashlib.md5(data.encode()).hexdigest()
 
 def is_corrupt(pkt):
-    checksum_esperado = calcular_checksum(pkt[1])
-    return checksum_esperado != pkt[2]
+    checksum_esperado = calcular_checksum(pkt[0])
+    return checksum_esperado != pkt[1]
 
 def make_pkt(numseq, data):
     pkt = (numseq, data, DEST_IP, calcular_checksum(data))
-    return pickle.dumps(pkt)
+    return pickle.dumps(pkt)  
 
-def receivePkt():
-    pkt = client.recvfrom(1024)
+def isACK(ack):
+    if ack == NUMSEQ:
+        return True
+    return False  
 
 def rdt_rcv():
-    pass
+    pktBytes = client.recvfrom(1024)
+    pkt = pickle.loads(pktBytes)
+    
+    #pacote será composto por (ACK, CHECKSUM)
+    return pkt
 
 def rdt_send(data):
-    pkt = make_pkt(NUMSEQ, data)
-    client.sendto(pkt, ADDR)
+    pktSended = make_pkt(NUMSEQ, data)
+    client.sendto(pktSended, ADDR)
     
     client.settimeout(TIME_WAIT)
     
     try:
-        print("Chegou algo")
+        pktReceived = rdt_rcv()
+        if isACK(pktReceived[0]) or not(is_corrupt(pktReceived)):
+            print("O pacote chegou ao destino com sucesso!")
     except socket.timeout:
-        print("Pacote não chegou a tempo, mandando navamente...")
+        print("O temporizador esgotou, mandando navamente...")
         rdt_send(data)
+    finally:
+        client.close()    
+    
     
     
 if __name__ == '__main__':
