@@ -20,8 +20,8 @@ def is_corrupt(pkt):
     checksum_esperado = calcular_checksum(pkt[0])
     return checksum_esperado != pkt[1]
 
-def make_pkt(numseq, data):
-    pkt = (numseq, data, DEST_IP, calcular_checksum(data))
+def make_pkt(data):
+    pkt = (data, calcular_checksum(data), NUMSEQ, DEST_IP)
     return pickle.dumps(pkt)  
 
 def isACK(ack):
@@ -33,11 +33,11 @@ def rdt_rcv():
     pktBytes = client.recvfrom(1024)
     pkt = pickle.loads(pktBytes)
     
-    #pacote será composto por (ACK, CHECKSUM)
+    #pacote será composto por (ACK, CHECKSUM, dest_ip)
     return pkt
 
 def rdt_send(data):
-    pktSended = make_pkt(NUMSEQ, data)
+    pktSended = make_pkt(data)
     client.sendto(pktSended, ADDR)
     
     client.settimeout(TIME_WAIT)
@@ -46,6 +46,12 @@ def rdt_send(data):
         pktReceived = rdt_rcv()
         if isACK(pktReceived[0]) or not(is_corrupt(pktReceived)):
             print("O pacote chegou ao destino com sucesso!")
+            if NUMSEQ:
+                NUMSEQ = 0
+            else:
+                NUMSEQ = 1
+        else:
+            print("O pacote chegou corrompido no destino, mandando novamente...")
     except socket.timeout:
         print("O temporizador esgotou, mandando navamente...")
         rdt_send(data)
