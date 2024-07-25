@@ -6,7 +6,7 @@ PORT = 5556
 DISCONNECT_MESSAGE = "!DISCONNECT"
 SERVER = "192.168.100.250"
 ADDR = (SERVER, PORT)
-DEST_IP = '0.0.0.0'
+DEST_IP = '192.168.100.101'
 TIME_WAIT = 3
 
 NUMSEQ = 0
@@ -21,7 +21,7 @@ def is_corrupt(pkt):
     return checksum_esperado != pkt[1]
 
 def make_pkt(data):
-    pkt = (data, calcular_checksum(data), NUMSEQ, DEST_IP)
+    pkt = (data, calcular_checksum(data), NUMSEQ, (DEST_IP, 5557))
     return pickle.dumps(pkt)  
 
 def isACK(ack):
