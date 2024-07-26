@@ -5,7 +5,7 @@ import pickle
 import time 
 
 PORT = 5555
-SERVER = socket.gethostbyname(socket.SOCK_DGRAM)
+SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
 
 server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
