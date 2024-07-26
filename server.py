@@ -25,19 +25,25 @@ def receber_e_enviar():
     pacote, addr = server.recvfrom(1024)
     pacote = pickle.loads(pacote)
     num_seq, msg, checksum, destino = pacote
+    print(msg)
 
     time.sleep(5)
 
     print("Montando e enviando pacote para receiver")
     package = fazer_pacote(num_seq, msg, checksum, addr)
-    server.sendto(package, destino)
+    print("debugg 1")
+    pkg = pickle.dumps(package)
+    print("debugg")
+    server.sendto(pkg, addr)
 
 if __name__ == '__main__':
     disconnect_message = 'disconnect'
     message = 'blabla'
     while message != disconnect_message:
         receber_e_enviar()
-        message = input("Se quiser desconectar, digite disconnect.")
+        print("Recebendo mensagem do receiver...")
+        message = input("Para desconectar, digite disconnect. Caso contrário, digite qualquer coisa.")  
+        print("Recebendo mensagem do receiver...")
 
 
 
