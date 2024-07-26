@@ -31,5 +31,13 @@ def receber_e_enviar():
     package = fazer_pacote(num_seq, msg, checksum, addr)
     server.sendto(package, destino)
 
+if __name__ == '__main__':
+    disconnect_message = 'disconnect'
+    message = 'blabla'
+    while message != disconnect_message:
+        receber_e_enviar()
+        message = input("Se quiser desconectar, digite disconnect.")
+
+
 
     
