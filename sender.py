@@ -22,9 +22,9 @@ def fazer_pacote(num_seq, msg, destino):
 
 def enviar(msg, destino):
     num_seq = num_seq_global 
-    msg = pickle.dumps(msg)
     pacote = fazer_pacote(num_seq, msg, destino)
-    server.sendto(pacote, ADDR)
+    pkg = pickle.dumps(pacote)
+    server.sendto(pkg, ADDR)
     num_seq_global = 1 - num_seq_global
 
 if __name__ == '__main__':

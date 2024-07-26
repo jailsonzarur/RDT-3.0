@@ -10,13 +10,11 @@ num_seq_esperado = 0
 receiver = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 receiver.bind(ADDR)
 
-def receber_msg():
-    num_seq = num_seq_esperado 
+def receber_msg(): 
     pacote, remetente = receiver.recvfrom(1024)
+    pacote = pickle.loads(pacote)
     num_seq, msg, checksum, destino = pacote
-    num_seq_esperado = 1 - num_seq_esperado
-    print(pickle.loads(msg))
-
+    print(msg)
 
 if __name__ == "__main__":
     message = "blablabla"
