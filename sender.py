@@ -16,14 +16,15 @@ server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 def calculo_checksum(msg):
     return hashlib.md5(msg.encode()).hexdigest()
 
-def fazer_pacote(num_seq, msg):
-    pacote = (num_seq, msg, calculo_checksum(msg))
+def fazer_pacote(num_seq, msg, destino):
+    pacote = (num_seq, msg, calculo_checksum(msg), destino)
     return pacote
 
 def enviar(msg, destino):
     num_seq = num_seq_global 
-    pacote = fazer_pacote(num_seq, msg)
-    server.sendto(pacote, destino)
+    msg = pickle.dumps(msg)
+    pacote = fazer_pacote(num_seq, msg, destino)
+    server.sendto(pacote, ADDR)
     num_seq_global = 1 - num_seq_global
 
 if __name__ == '__main__':
