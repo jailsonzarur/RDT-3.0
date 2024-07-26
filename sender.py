@@ -2,7 +2,7 @@ import socket
 import pickle
 import hashlib
 
-num_seq_global = 0
+##num_seq_global = 0
 
 PORT = 5556
 SERVER = "192.168.4.10"
@@ -21,18 +21,18 @@ def fazer_pacote(num_seq, msg, destino):
     return pacote
 
 def enviar(msg, destino):
-    num_seq = num_seq_global 
+    #num_seq = num_seq_global 
+    msg = pickle.dumps(msg)
     pacote = fazer_pacote(num_seq, msg, destino)
-    pkg = pickle.dumps(pacote)
-    server.sendto(pkg, ADDR)
-    num_seq_global = 1 - num_seq_global
+    server.sendto(pacote, ADDR)
+    ##num_seq_global = 1 - num_seq_global
 
 if __name__ == '__main__':
     print("Você está conectado ao server")
     mensagem = "_"
     while mensagem != desconectar:
-        message = input("Digite a mensagem que você quer enviar.")
-        ip_dest = input("Digite o endereco IP do destino")
-        gate_dest = input("Digite a porta do destino")
+        message = input("Digite a mensagem que você quer enviar: ")
+        ip_dest = input("Digite o endereco IP do destino: ")
+        gate_dest = input("Digite a porta do destino: ")
         destino = (ip_dest, gate_dest)
         enviar(message, destino)
