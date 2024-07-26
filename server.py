@@ -34,7 +34,7 @@ def receber_e_enviar():
     print("debugg 1")
     pkg = pickle.dumps(package)
     print("debugg")
-    server.sendto(pkg, addr)
+    server.sendto(pkg, destino)
 
 if __name__ == '__main__':
     disconnect_message = 'disconnect'
