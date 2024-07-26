@@ -19,5 +19,6 @@ def receber_msg():
 if __name__ == "__main__":
     message = "blablabla"
     while message != DISCONNECT_MESSAGE:
+        print("Recebendo mensagem.....")
         receber_msg()
         message = input("Digite disconnect para desconectar.")
