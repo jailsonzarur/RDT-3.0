@@ -23,6 +23,7 @@ def receber_e_enviar():
     # usaremos addr para no futuro, o receiver enviar respostas para o sender !!
     print("Recebendo pacote de sender")
     pacote, addr = server.recvfrom(1024)
+    pacote = pickle.loads(pacote)
     num_seq, msg, checksum, destino = pacote
 
     time.sleep(5)
