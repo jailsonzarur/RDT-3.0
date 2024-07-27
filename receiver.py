@@ -1,8 +1,8 @@
 import socket
 import pickle
 
-PORT = 5557
-SERVER = "192.168.4.10"
+PORT = 5556
+SERVER = "192.168.4.50"
 ADDR = (SERVER, PORT)
 DISCONNECT_MESSAGE = "disconnect"
 num_seq_esperado = 0
