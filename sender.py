@@ -33,6 +33,6 @@ if __name__ == '__main__':
     while mensagem != desconectar:
         message = input("Digite a mensagem que você quer enviar: ")
         ip_dest = input("Digite o endereco IP do destino: ")
-        gate_dest = input("Digite a porta do destino: ")
+        gate_dest = int(input("Digite a porta do destino: "))
         destino = (ip_dest, int(gate_dest))
         enviar(message, destino)

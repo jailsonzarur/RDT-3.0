@@ -21,5 +21,5 @@ if __name__ == "__main__":
     while message != DISCONNECT_MESSAGE:
         print("Recebendo mensagem.....")
         receber_msg()
-        message = input("Digite disconnect para desconectar.")
+        message = input("Digite disconnect para desconectar. Caso contrário, digite qualquer coisa.")
  
