@@ -3,6 +3,7 @@ import pickle
 import hashlib
 
 ##num_seq_global = 0
+num_seq = 0
 
 PORT = 5556
 SERVER = "" #Colocar o IP do server
@@ -23,15 +24,22 @@ def fazer_pacote(num_seq, msg, destino):
     return pacote
 
 def enviar(msg, destino):
-    num_seq = 0
+    global num_seq
+    num_seq = 1 - num_seq
     pacote = fazer_pacote(num_seq, msg, destino)
+    pacote = (pacote, 'SENDER')
     pkg = pickle.dumps(pacote)
     server.sendto(pkg, DESTINO_SERVER)
-    ##num_seq_global = 1 - num_seq_global
-    pacote, destino_server = server.recvfrom(1024)
-    pacote = pickle.loads(pacote)
-    num_seq, msg, checksum, destino_sender = pacote
-    print(msg)
+    
+    server.settimeout(30)
+    
+    try:
+        pacote, destino_server = server.recvfrom(1024)
+        pacote = pickle.loads(pacote)
+        num_seq, msg, checksum, destino_sender = pacote
+        print(msg)
+    except socket.timeout:
+        print("Opa, alguma coisa deu errado")
     
     
 if __name__ == '__main__':

@@ -5,7 +5,7 @@ import hashlib
 PORT = 5557
 ADDR = ("", PORT) #Colocar o IP do receiver
 DISCONNECT_MESSAGE = "disconnect"
-num_seq_esperado = 0
+num_seq_esperado = 1
 
 receiver = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 receiver.bind(ADDR)
@@ -24,6 +24,7 @@ def receber_msg():
     print(msg)
     msg = "Chegou, tá tudo OK por aqui!"
     pkt = fazer_pacote(num_seq, msg, destino_sender)
+    pkt = (pkt, 'RECEIVER')
     pkt = pickle.dumps(pkt)
     receiver.sendto(pkt, destino_server)
 

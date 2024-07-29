@@ -22,16 +22,34 @@ def receber_e_enviar():
     # usaremos addr para no futuro, o receiver enviar respostas para o sender !!
     print("Recebendo pacote")
     pacote, destino_de_onde_veio = server.recvfrom(1024)
-    pacote = pickle.loads(pacote)
-    num_seq, msg, checksum, destino_pra_onde_vai = pacote
-    print(msg)
+    pacoteCompleto = pickle.loads(pacote)
+    pkt, flag = pacoteCompleto
     
-    time.sleep(5)
-
-    package = fazer_pacote(num_seq, msg, checksum, destino_de_onde_veio)
-    pkg = pickle.dumps(package)
-    print("oxe")
-    server.sendto(pkg, destino_pra_onde_vai)
+    num_seq, msg, checksum, destino_pra_onde_vai = pkt
+    
+    if flag == 'RECEIVER':
+        print('----- MENU -----')
+        print('1 - BARRAR A CHEGADA DO PACOTE')
+        print('2 - DEIXA O PACOTE PASSAR')
+        option = input('Digite uma opcao: ')
+        if option == '1':
+            print("Só espere...")
+        if option == '2':
+            package = fazer_pacote(num_seq, msg, checksum, destino_de_onde_veio)
+            pkg = pickle.dumps(package)
+            server.sendto(pkg, destino_pra_onde_vai)
+            
+    if flag == 'SENDER':
+        print('----- MENU -----')
+        print('1 - BARRAR A CHEGADA DO PACOTE')
+        print('2 - DEIXA O PACOTE PASSAR')
+        option = input('Digite uma opcao: ')
+        if option == '1':
+            print("Só espere...")
+        if option == '2':
+            package = fazer_pacote(num_seq, msg, checksum, destino_de_onde_veio)
+            pkg = pickle.dumps(package)
+            server.sendto(pkg, destino_pra_onde_vai)
 
 if __name__ == '__main__':
     disconnect_message = 'disconnect'
