@@ -3,8 +3,7 @@ import pickle
 import hashlib
 
 PORT = 5557
-SERVER = socket.gethostbyname(socket.gethostname())
-ADDR = (SERVER, PORT)
+ADDR = (socket.gethostbyname(socket.gethostname()), PORT)
 DISCONNECT_MESSAGE = "disconnect"
 num_seq_esperado = 0
 
