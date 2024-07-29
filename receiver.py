@@ -3,7 +3,7 @@ import pickle
 import hashlib
 
 PORT = 5557
-ADDR = (socket.gethostbyname(socket.gethostname()), PORT)
+ADDR = ("", PORT) #Colocar o IP do receiver
 DISCONNECT_MESSAGE = "disconnect"
 num_seq_esperado = 0
 
@@ -17,7 +17,6 @@ def fazer_pacote(num_seq, msg, destino):
     pacote = (num_seq, msg, calculo_checksum(msg), destino)
     return pacote
     
-
 def receber_msg(): 
     pacote, destino_server = receiver.recvfrom(1024)
     pacote = pickle.loads(pacote)

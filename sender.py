@@ -5,7 +5,7 @@ import hashlib
 ##num_seq_global = 0
 
 PORT = 5556
-SERVER = "192.168.100.250"
+SERVER = "" #Colocar o IP do server
 ADDR = (socket.gethostbyname(socket.gethostname()), PORT)
 DESTINO_SERVER = (SERVER, 5555)
 TIME_WAIT = 3

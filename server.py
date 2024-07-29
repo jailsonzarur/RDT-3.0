@@ -30,6 +30,7 @@ def receber_e_enviar():
 
     package = fazer_pacote(num_seq, msg, checksum, destino_de_onde_veio)
     pkg = pickle.dumps(package)
+    print("oxe")
     server.sendto(pkg, destino_pra_onde_vai)
 
 if __name__ == '__main__':
