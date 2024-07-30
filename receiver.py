@@ -4,7 +4,7 @@ import hashlib
 import threading
 
 PORT = 5557
-ADDR = ("192.168.0.104", PORT)  # Colocar o IP do receiver
+ADDR = ("", PORT)  # Colocar o IP do receiver
 DISCONNECT_MESSAGE = "disconnect"
 num_seq_esperado = 0
 
@@ -25,7 +25,7 @@ def receber_msg():
     num_seq, msg, checksum, destino_sender = pacote
 
     if num_seq == num_seq_esperado and calculo_checksum(msg) == checksum:
-        print("Mensagem recebida: ", msg)
+        print("Mensagem recebida: ", msg) #Representação da Extração
         msg = "ACK: Recebido"
         num_seq_esperado = 1 - num_seq_esperado
         pkt = fazer_pacote(1 - num_seq_esperado, msg, destino_sender)
@@ -34,7 +34,7 @@ def receber_msg():
         receiver.sendto(pkt, destino_server)
     elif calculo_checksum(msg) != checksum:
         print(f"Pacote corrompido")
-    elif num_seq != num_seq_esperado:
+    elif num_seq != num_seq_esperado: #Detecta pkt duplicado
         msg = "ACK: Recebido"
         pkt = fazer_pacote(1 - num_seq_esperado, msg, destino_sender)
         pkt = (pkt, 'RECEIVER')
