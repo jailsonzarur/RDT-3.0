@@ -31,11 +31,17 @@ def receber_e_enviar():
         print('----- MENU -----')
         print('1 - BARRAR A CHEGADA DO PACOTE')
         print('2 - DEIXA O PACOTE PASSAR')
+        print('3 - CORROMPER O PACOTE')
         option = input('Digite uma opcao: ')
         if option == '1':
             print("Só espere...")
         if option == '2':
             package = fazer_pacote(num_seq, msg, checksum, destino_de_onde_veio)
+            pkg = pickle.dumps(package)
+            server.sendto(pkg, destino_pra_onde_vai)
+        if option == '3':
+            checksum_corrompido = 'corrompido'
+            package = fazer_pacote(num_seq, msg, checksum_corrompido, destino_de_onde_veio)
             pkg = pickle.dumps(package)
             server.sendto(pkg, destino_pra_onde_vai)
             
@@ -43,6 +49,7 @@ def receber_e_enviar():
         print('----- MENU -----')
         print('1 - BARRAR A CHEGADA DO PACOTE')
         print('2 - DEIXA O PACOTE PASSAR')
+        print('3 - CORROMPER O PACOTE')
         option = input('Digite uma opcao: ')
         if option == '1':
             print("Só espere...")
@@ -50,6 +57,13 @@ def receber_e_enviar():
             package = fazer_pacote(num_seq, msg, checksum, destino_de_onde_veio)
             pkg = pickle.dumps(package)
             server.sendto(pkg, destino_pra_onde_vai)
+        if option == '3':
+            checksum_corrompido = 'corrompido'
+            package = fazer_pacote(num_seq, msg, checksum_corrompido, destino_de_onde_veio)
+            pkg = pickle.dumps(package)
+            server.sendto(pkg, destino_pra_onde_vai)
+            
+    print()
 
 if __name__ == '__main__':
     disconnect_message = 'disconnect'
