@@ -1,7 +1,7 @@
 import socket
 import pickle
 import hashlib
-import time
+import threading
 
 num_seq = 0
 PORT = 5556
@@ -49,8 +49,9 @@ def enviar(msg, destino):
 if __name__ == '__main__':
     ip_dest_receiver = input("Digite o endereço IP do destino: ")
     gate_dest_receiver = int(input("Digite a porta do destino: "))
-    mensagem = "_"
-    while mensagem != desconectar:
-        message = input("Digite a mensagem que você quer enviar: ")
+    while True:
+        mensagem = input("Digite a mensagem que você quer enviar: ")
         destino = (ip_dest_receiver, gate_dest_receiver)
-        enviar(message, destino)
+        thread = threading.Thread(target=enviar, args=(mensagem, destino))
+        thread.start()
+        thread.join()

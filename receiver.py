@@ -1,6 +1,7 @@
 import socket
 import pickle
 import hashlib
+import threading
 
 PORT = 5557
 ADDR = ("192.168.0.104", PORT)  # Colocar o IP do receiver
@@ -27,17 +28,21 @@ def receber_msg():
         print("Mensagem recebida: ", msg)
         msg = "ACK: Recebido"
         num_seq_esperado = 1 - num_seq_esperado
-    else:
-        print("Pacote corrompido ou fora de ordem. Enviando NACK")
-        msg = "NACK: Erro no pacote"
-    
-    pkt = fazer_pacote(1 - num_seq_esperado, msg, destino_sender)
-    pkt = (pkt, 'RECEIVER')
-    pkt = pickle.dumps(pkt)
-    receiver.sendto(pkt, destino_server)
+        pkt = fazer_pacote(1 - num_seq_esperado, msg, destino_sender)
+        pkt = (pkt, 'RECEIVER')
+        pkt = pickle.dumps(pkt)
+        receiver.sendto(pkt, destino_server)
+    elif calculo_checksum(msg) != checksum:
+        print(f"Pacote corrompido")
+    elif num_seq != num_seq_esperado:
+        msg = "ACK: Recebido"
+        pkt = fazer_pacote(1 - num_seq_esperado, msg, destino_sender)
+        pkt = (pkt, 'RECEIVER')
+        pkt = pickle.dumps(pkt)
+        receiver.sendto(pkt, destino_server)
 
 if __name__ == "__main__":
-    message = "blablabla"
-    print("Recebendo mensagem...")
-    while message != DISCONNECT_MESSAGE:
-        receber_msg()
+    while True:
+        thread = threading.Thread(target=receber_msg)
+        thread.start()
+        thread.join()
