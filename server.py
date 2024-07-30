@@ -1,7 +1,7 @@
 import socket
 import hashlib
 import pickle
-import time 
+import time
 
 PORT = 5555
 SERVER = socket.gethostbyname(socket.gethostname())
@@ -18,8 +18,6 @@ def fazer_pacote(num_seq, msg, checksum, addr):
     return pacote
 
 def receber_e_enviar():
-    # addr = ip e gate do sender
-    # usaremos addr para no futuro, o receiver enviar respostas para o sender !!
     print("Recebendo pacote")
     pacote, destino_de_onde_veio = server.recvfrom(1024)
     pacoteCompleto = pickle.loads(pacote)
@@ -27,51 +25,32 @@ def receber_e_enviar():
     
     num_seq, msg, checksum, destino_pra_onde_vai = pkt
     
-    if flag == 'RECEIVER':
-        print('----- MENU -----')
-        print('1 - BARRAR A CHEGADA DO PACOTE')
-        print('2 - DEIXA O PACOTE PASSAR')
-        print('3 - CORROMPER O PACOTE')
-        option = input('Digite uma opcao: ')
-        if option == '1':
-            print("Só espere...")
-        if option == '2':
-            package = fazer_pacote(num_seq, msg, checksum, destino_de_onde_veio)
-            pkg = pickle.dumps(package)
-            server.sendto(pkg, destino_pra_onde_vai)
-        if option == '3':
-            checksum_corrompido = 'corrompido'
-            package = fazer_pacote(num_seq, msg, checksum_corrompido, destino_de_onde_veio)
-            pkg = pickle.dumps(package)
-            server.sendto(pkg, destino_pra_onde_vai)
-            
-    if flag == 'SENDER':
-        print('----- MENU -----')
-        print('1 - BARRAR A CHEGADA DO PACOTE')
-        print('2 - DEIXA O PACOTE PASSAR')
-        print('3 - CORROMPER O PACOTE')
-        option = input('Digite uma opcao: ')
-        if option == '1':
-            print("Só espere...")
-        if option == '2':
-            package = fazer_pacote(num_seq, msg, checksum, destino_de_onde_veio)
-            pkg = pickle.dumps(package)
-            server.sendto(pkg, destino_pra_onde_vai)
-        if option == '3':
-            checksum_corrompido = 'corrompido'
-            package = fazer_pacote(num_seq, msg, checksum_corrompido, destino_de_onde_veio)
-            pkg = pickle.dumps(package)
-            server.sendto(pkg, destino_pra_onde_vai)
-            
-    print()
+    print(f'----- MENU - {flag} - ({num_seq}){msg} -----')
+    print('1 - BARRAR A CHEGADA DO PACOTE')
+    print('2 - DEIXAR O PACOTE PASSAR')
+    print('3 - CORROMPER O PACOTE')
+    print('4 - DUPLICAR O PACOTE')
+    option = input('Digite uma opção: ')
+    
+    if option == '1':
+        print("Pacote barrado")
+    elif option == '2':
+        package = fazer_pacote(num_seq, msg, checksum, destino_de_onde_veio)
+        pkg = pickle.dumps(package)
+        server.sendto(pkg, destino_pra_onde_vai)
+    elif option == '3':
+        checksum_corrompido = 'corrompido'
+        package = fazer_pacote(num_seq, msg, checksum_corrompido, destino_de_onde_veio)
+        pkg = pickle.dumps(package)
+        server.sendto(pkg, destino_pra_onde_vai)
+    elif option == '4':
+        package = fazer_pacote(num_seq, msg, checksum, destino_de_onde_veio)
+        pkg = pickle.dumps(package)
+        server.sendto(pkg, destino_pra_onde_vai)
+        server.sendto(pkg, destino_pra_onde_vai)
 
 if __name__ == '__main__':
     disconnect_message = 'disconnect'
     message = 'blabla'
     while message != disconnect_message:
         receber_e_enviar()
-
-
-
-
-    

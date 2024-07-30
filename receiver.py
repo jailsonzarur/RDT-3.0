@@ -3,7 +3,7 @@ import pickle
 import hashlib
 
 PORT = 5557
-ADDR = ("", PORT) #Colocar o IP do receiver
+ADDR = ("192.168.0.104", PORT)  # Colocar o IP do receiver
 DISCONNECT_MESSAGE = "disconnect"
 num_seq_esperado = 0
 
@@ -16,7 +16,7 @@ def calculo_checksum(msg):
 def fazer_pacote(num_seq, msg, destino):
     pacote = (num_seq, msg, calculo_checksum(msg), destino)
     return pacote
-    
+
 def receber_msg():
     global num_seq_esperado
     pacote, destino_server = receiver.recvfrom(1024)
@@ -25,21 +25,19 @@ def receber_msg():
 
     if num_seq == num_seq_esperado and calculo_checksum(msg) == checksum:
         print("Mensagem recebida: ", msg)
-        msg = "Chegou, tá tudo OK por aqui!"
+        msg = "ACK: Recebido"
+        num_seq_esperado = 1 - num_seq_esperado
     else:
-        print("Pacote corrompido ou fora de ordem")
-        msg = "ERROR: Erro no pacote."
+        print("Pacote corrompido ou fora de ordem. Enviando NACK")
+        msg = "NACK: Erro no pacote"
     
-    pkt = fazer_pacote(num_seq_esperado, msg, destino_sender)
+    pkt = fazer_pacote(1 - num_seq_esperado, msg, destino_sender)
     pkt = (pkt, 'RECEIVER')
     pkt = pickle.dumps(pkt)
     receiver.sendto(pkt, destino_server)
-    num_seq_esperado = 1 - num_seq_esperado
 
 if __name__ == "__main__":
     message = "blablabla"
-    print("Recebendo mensagem.....")
+    print("Recebendo mensagem...")
     while message != DISCONNECT_MESSAGE:
         receber_msg()
-        print()
- 
