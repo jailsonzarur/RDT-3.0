@@ -4,8 +4,9 @@ import pickle
 import threading
 
 PORT = 5555
-SERVER = socket.gethostbyname(socket.gethostname())
+SERVER = "172.20.10.3"
 ADDR = (SERVER, PORT)
+
 
 server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 server.bind(ADDR)
